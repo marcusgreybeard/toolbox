@@ -3,8 +3,10 @@ FROM ghcr.io/openclaw/openclaw:latest
 
 USER root
 
-# Create /nix before install (avoids sudo requirement)
-RUN mkdir -m 0755 /nix && chown root /nix
+# Create /nix and configure for single-user container install
+RUN mkdir -m 0755 /nix && chown root /nix && \
+    mkdir -p /etc/nix && \
+    echo 'build-users-group =' > /etc/nix/nix.conf
 
 # Install Nix (single-user, no daemon)
 RUN curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon

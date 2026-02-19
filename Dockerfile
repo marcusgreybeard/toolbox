@@ -1,24 +1,18 @@
-# Marcus's Toolbox - extends OpenClaw with Nix-managed tools
+# Marcus's Toolbox - extends OpenClaw with Flox-managed tools
 FROM ghcr.io/openclaw/openclaw:latest
 
 USER root
 
-# Create /nix and configure for single-user container install
-RUN mkdir -m 0755 /nix && chown root /nix && \
-    mkdir -p /etc/nix && \
-    echo 'build-users-group =' > /etc/nix/nix.conf
-
-# Install Nix (single-user, no daemon)
-RUN curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon
-
-# Copy Nix expression
-COPY shell.nix /opt/toolbox/shell.nix
-
-# Install tools via Nix and symlink into PATH
-RUN . /root/.nix-profile/etc/profile.d/nix.sh && \
-    nix-env -if /opt/toolbox/shell.nix && \
-    ln -sf /root/.nix-profile/bin/* /usr/local/bin/ 2>/dev/null || true && \
-    nix-collect-garbage -d
+# Install Flox (handles Nix setup properly)
+ARG TARGETARCH
+ARG FLOX_VERSION=1.9.0
+RUN apt-get update && \
+    ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
+    curl -fsSL "https://downloads.flox.dev/by-env/stable/deb/flox-${FLOX_VERSION}.${ARCH}-linux.deb" -o /tmp/flox.deb && \
+    dpkg -i /tmp/flox.deb || apt-get install -f -y && \
+    dpkg -i /tmp/flox.deb && \
+    rm -f /tmp/flox.deb && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add sync scripts
 COPY scripts/ /opt/toolbox/scripts/

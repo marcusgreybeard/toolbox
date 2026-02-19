@@ -1,20 +1,30 @@
-# Marcus's Toolbox
+# Marcus's Toolbox 🔧
 
-Custom OpenClaw image with additional CLI tools.
+Custom OpenClaw image with [Flox](https://flox.dev) for reproducible tool management.
 
-## Included Tools
-- **gh** — GitHub CLI
-- **railway** — Railway CLI  
-- **caddy** — Web server
-- **jq** — JSON processor
-- **sops** — Encrypted secrets management
-- **age** — Modern encryption (SOPS backend)
+## What's in it
 
-## Adding Tools
-Edit `shell.nix` — all tools managed declaratively via Nix.
+Extends `ghcr.io/openclaw/openclaw:latest` with:
+
+- **Flox** — Nix-based package manager that actually works in containers
+- **storj-sync** — Durable workspace backup to Storj
+
+## Tools (installed via Flox at runtime)
+
+```
+gh        # GitHub CLI
+railway   # Railway CLI
+jq        # JSON processor
+caddy     # Web server
+uplink    # Storj object storage CLI
+sops      # Encrypted secrets
+age       # Modern encryption
+```
 
 ## Usage
-Set as the OpenClaw container image, or build locally:
-```bash
-docker build -t marcusgreybeard/toolbox .
+
+```dockerfile
+FROM ghcr.io/marcusgreybeard/toolbox:latest
 ```
+
+Then use `flox install <package>` to add tools, or activate a Flox environment.

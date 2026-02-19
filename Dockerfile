@@ -6,11 +6,10 @@ USER root
 # Install Flox (handles Nix setup properly)
 ARG TARGETARCH
 ARG FLOX_VERSION=1.9.0
-RUN apt-get update && \
+RUN apt-get update && apt-get install -y sudo && \
     ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
     curl -fsSL "https://downloads.flox.dev/by-env/stable/deb/flox-${FLOX_VERSION}.${ARCH}-linux.deb" -o /tmp/flox.deb && \
-    dpkg -i /tmp/flox.deb || apt-get install -f -y && \
-    dpkg -i /tmp/flox.deb && \
+    (dpkg -i /tmp/flox.deb || apt-get install -f -y) && \
     rm -f /tmp/flox.deb && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 

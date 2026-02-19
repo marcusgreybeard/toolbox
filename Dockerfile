@@ -3,14 +3,16 @@ FROM ghcr.io/openclaw/openclaw:latest
 
 USER root
 
-# Install Nix (single-user, no daemon needed in container)
-RUN curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon && \
-    ln -s /root/.nix-profile/bin/* /usr/local/bin/ 2>/dev/null || true
+# Create /nix before install (avoids sudo requirement)
+RUN mkdir -m 0755 /nix && chown root /nix
+
+# Install Nix (single-user, no daemon)
+RUN curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon
 
 # Copy Nix expression
 COPY shell.nix /opt/toolbox/shell.nix
 
-# Install tools via Nix
+# Install tools via Nix and symlink into PATH
 RUN . /root/.nix-profile/etc/profile.d/nix.sh && \
     nix-env -if /opt/toolbox/shell.nix && \
     ln -sf /root/.nix-profile/bin/* /usr/local/bin/ 2>/dev/null || true && \

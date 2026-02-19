@@ -7,6 +7,8 @@ Custom OpenClaw image with additional CLI tools.
 - **railway** — Railway CLI  
 - **caddy** — Web server
 - **jq** — JSON processor
+- **sops** — Encrypted secrets management
+- **age** — Modern encryption (SOPS backend)
 
 ## Usage
 Set as the OpenClaw container image, or build locally:

@@ -10,6 +10,9 @@ Custom OpenClaw image with additional CLI tools.
 - **sops** — Encrypted secrets management
 - **age** — Modern encryption (SOPS backend)
 
+## Adding Tools
+Edit `shell.nix` — all tools managed declaratively via Nix.
+
 ## Usage
 Set as the OpenClaw container image, or build locally:
 ```bash

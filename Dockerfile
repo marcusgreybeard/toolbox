@@ -16,4 +16,8 @@ RUN . /root/.nix-profile/etc/profile.d/nix.sh && \
     ln -sf /root/.nix-profile/bin/* /usr/local/bin/ 2>/dev/null || true && \
     nix-collect-garbage -d
 
+# Add sync scripts
+COPY scripts/ /opt/toolbox/scripts/
+RUN chmod +x /opt/toolbox/scripts/*.sh
+
 USER node

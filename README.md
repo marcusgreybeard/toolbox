@@ -1,6 +1,6 @@
 # Marcus's Toolbox 🔧
 
-Custom OpenClaw image with CLI tools for agent workflows.
+Custom OpenClaw image with CLI tools, built and deployed on Railway.
 
 ## What's in it
 
@@ -26,16 +26,6 @@ Extends `ghcr.io/openclaw/openclaw:latest` with:
 ### Scripts
 - `storj-sync.sh` — Sync durable workspace files to/from Storj
 
-## Usage
+## Deployment
 
-```dockerfile
-FROM ghcr.io/marcusgreybeard/toolbox:latest
-```
-
-## Deploying on Railway
-
-Set `OPENCLAW_IMAGE=ghcr.io/marcusgreybeard/toolbox:latest` in your OpenClaw Railway service, or use this image directly as the deployment source.
-
-## CI
-
-Pushes to `main` trigger a GitHub Actions workflow that builds multi-arch (amd64 + arm64) Docker images and pushes to `ghcr.io/marcusgreybeard/toolbox:latest`.
+Push to `main` → Railway auto-builds from Dockerfile → deploys as OpenClaw gateway.
